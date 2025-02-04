@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  database:
+    container_name: order_database
+    image: postgres:16.4
+    environment:
+      POSTGRES_PASSWORD: mysecurepassword
+      POSTGRES_USER: root
+      POSTGRES_DB: shop
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
