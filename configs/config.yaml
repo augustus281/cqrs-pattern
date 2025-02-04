@@ -1,0 +1,23 @@
+db:
+  host: postgres16
+  port: 5432
+  username: root
+  password: mysecurepassword
+  dbname: shop
+  sslmode: disable
+  timezone: "utc"
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifetime: 3600
+
+log:
+  log_level: debug
+  file_log_name: "./storages/logs/dev.001.log"
+  max_size: 500
+  max_backups: 3
+  max_age: 28
+  compress: true
+
+server:
+  port: 8080
+  mode: "dev"
