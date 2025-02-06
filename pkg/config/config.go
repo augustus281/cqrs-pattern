@@ -4,6 +4,7 @@ type Config struct {
 	Server     ServerConfig     `mapstructure:"config"`
 	PostgreSQL PostgreSQLConfig `mapstructure:"postgresql"`
 	Logger     LoggerConfig     `mapstructure:"logger"`
+	Jaeger     JaegerConfig     `mapstructure:"jaeger"`
 }
 
 type ServerConfig struct {
@@ -31,4 +32,11 @@ type LoggerConfig struct {
 	Max_age       int    `mapstructure:"max_age"`
 	Max_size      int    `mapstructure:"max_size"`
 	Compress      bool   `mapstructure:"compress"`
+}
+
+type JaegerConfig struct {
+	Enable      bool   `mapstructure:"enable"`
+	ServiceName string `mapstructure:"service_name"`
+	HostPort    string `mapstructure:"host_port"`
+	LogSpans    bool   `mapstructure:"log_spans"`
 }
