@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   database:
-    container_name: order_database
+    container_name: postgresql_container
     image: postgres:16.4
     environment:
       POSTGRES_PASSWORD: mysecurepassword
@@ -13,5 +13,39 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks: 
+      - microservices
+
+  node_exporter:
+    container_name: node_exporter_container
+    restart: always
+    image: prom/node-exporter
+    ports:
+     - '9101:9100'
+    networks:
+      - microservices
+
+  grafana:
+    container_name: grafana_container
+    restart: always
+    image: grafana/grafana
+    ports:
+      - '3005:3000'
+    networks: 
+      - microservices
+
 volumes:
   db:
+
+networks:
+  microservices:
+    name: microservices
