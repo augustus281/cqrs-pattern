@@ -21,3 +21,11 @@ log:
 server:
   port: 8080
   mode: "dev"
+
+jaeger:
+  enable: true
+  service_name: es_service
+  host_port: "localhost:6831"
+  log_spans: false
+
+service_name: es_service
