@@ -10,6 +10,7 @@ func Run() {
 	LoadConfig()
 	InitLogger()
 	InitDB()
+	StartTracing()
 
 	r := InitRouter()
 	serverAddr := fmt.Sprintf(":%v", global.Config.Server.Port)
