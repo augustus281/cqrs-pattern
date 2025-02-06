@@ -5,6 +5,7 @@ type Config struct {
 	PostgreSQL PostgreSQLConfig `mapstructure:"postgresql"`
 	Logger     LoggerConfig     `mapstructure:"logger"`
 	Jaeger     JaegerConfig     `mapstructure:"jaeger"`
+	EventStore EventStoreConfig `mapstructure:"event_store"`
 }
 
 type ServerConfig struct {
@@ -39,4 +40,8 @@ type JaegerConfig struct {
 	ServiceName string `mapstructure:"service_name"`
 	HostPort    string `mapstructure:"host_port"`
 	LogSpans    bool   `mapstructure:"log_spans"`
+}
+
+type EventStoreConfig struct {
+	ConnectionString string `mapstructure:"connection_string"`
 }

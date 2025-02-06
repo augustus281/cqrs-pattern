@@ -28,4 +28,7 @@ jaeger:
   host_port: "localhost:6831"
   log_spans: false
 
+event_store:
+  connection_string: "esdb://localhost:2113?tls=false"
+
 service_name: es_service
