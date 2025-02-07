@@ -1,11 +1,13 @@
 package config
 
 type Config struct {
-	Server     ServerConfig     `mapstructure:"config"`
-	PostgreSQL PostgreSQLConfig `mapstructure:"postgresql"`
-	Logger     LoggerConfig     `mapstructure:"logger"`
-	Jaeger     JaegerConfig     `mapstructure:"jaeger"`
-	EventStore EventStoreConfig `mapstructure:"event_store"`
+	Server         ServerConfig         `mapstructure:"config"`
+	PostgreSQL     PostgreSQLConfig     `mapstructure:"postgresql"`
+	Logger         LoggerConfig         `mapstructure:"logger"`
+	Jaeger         JaegerConfig         `mapstructure:"jaeger"`
+	EventStore     EventStoreConfig     `mapstructure:"event_store"`
+	ElasticSearch  ElasticSearchConfig  `mapstructure:"elastic_search"`
+	ElasticIndexes ElasticIndexesConfig `mapstructure:"elastic_indexes"`
 }
 
 type ServerConfig struct {
@@ -40,6 +42,20 @@ type JaegerConfig struct {
 	ServiceName string `mapstructure:"service_name"`
 	HostPort    string `mapstructure:"host_port"`
 	LogSpans    bool   `mapstructure:"log_spans"`
+}
+
+type ElasticSearchConfig struct {
+	Url         string `mapstructure:"url"`
+	Sniff       bool   `mapstructure:"sniff"`
+	Gzip        bool   `mapstructure:"gzip"`
+	Explain     bool   `mapstructure:"explain"`
+	FetchSource bool   `mapstructure:"fetch_source"`
+	Version     bool   `mapstructure:"version"`
+	Pretty      bool   `mapstructure:"pretty"`
+}
+
+type ElasticIndexesConfig struct {
+	Orders string `mapstructure:"orders" validate:"required"`
 }
 
 type EventStoreConfig struct {
