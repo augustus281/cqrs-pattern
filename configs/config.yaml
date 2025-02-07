@@ -31,4 +31,16 @@ jaeger:
 event_store:
   connection_string: "esdb://localhost:2113?tls=false"
 
+elastic_search:
+  url: "http://localhost:9200"
+  sniff: false
+  gzip: true
+  explain: true
+  fetch_source: true
+  version: true
+  pretty: true
+
+elastic_indexes:
+  orders: "orders"
+
 service_name: es_service
