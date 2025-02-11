@@ -4,3 +4,120 @@ package orderservice;
 
 option go_package = "./;orderservice";
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+    rpc PayOrder(PayOrderRequest) returns (PayOrderResponse);
+    rpc SumbitOrder(SubmitOrderRequest) returns (SubmitOrderResponse);
+    rpc UpdateShoppingCart(UpdateShoppingCartRequest) returns (google.protobuf.Empty);
+    rpc CancelOrder(CancelOrderRequest) returns (CreateOrderResponse);
+    rpc CompleteOrder(CompleteOrderRequest) returns (google.protobuf.Empty);
+    rpc ChangeDeliveryAddress(ChangeDeliveryAddressRequest) returns (google.protobuf.Empty);
+    rpc GetOrderByID(GetOrderByIDRequest) returns (GetOrderByIDResponse);
+    rpc Search(SearchRequest) returns (SearchResponse);
+}
+
+message CreateOrderRequest {
+    string account_email = 1;
+    repeated ShopItem shop_items = 2;
+    string delivery_address = 3;
+}
+
+message CreateOrderResponse {
+    string aggregate_id = 1;
+}
+
+message PayOrderRequest {
+    string aggregate_id = 1;
+    Payment payment = 2;
+}
+
+message PayOrderResponse {
+    string aggregate_id = 1;
+}
+
+message SubmitOrderRequest {
+    string aggregate_id = 1;
+}
+
+message SubmitOrderResponse {
+    string aggregate_id = 1;
+}
+
+message GetOrderByIDRequest {
+    string aggregate_id = 1;
+}
+
+message GetOrderByIDResponse {
+    Order order = 1;
+}
+
+message UpdateShoppingCartRequest {
+    string aggregate_id = 1;
+    repeated ShopItem shop_items = 2;
+}
+
+message CancelOrderRequest {
+    string aggregate_id = 1;
+    string cancel_reason = 2;
+}
+
+message CompleteOrderRequest {
+    string aggregate_id = 1;
+    google.protobuf.Timestamp delivery_timestamp = 2;
+}
+
+message ChangeDeliveryAddressRequest {
+    string aggregate_id = 1;
+    string delivery_address = 2;
+}
+
+message SearchRequest {
+    string search_text = 1;
+    int64 page = 2;
+    int64 size = 3;
+}
+
+message SearchResponse {
+    Pagination pagination = 1;
+    repeated Order orders = 2;
+}
+
+message Pagination {
+    int64 total_count = 1;
+    int64 total_pages = 2;
+    int64 page = 3;
+    int64 size = 4;
+    bool has_more = 5;
+}
+
+message Payment {
+    string id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+message ShopItem {
+    string id = 1;
+    string title = 2;
+    string desription = 3;
+    uint64 quantity = 4;
+    double price = 5;
+}
+
+message Order {
+    string id = 1;
+    repeated ShopItem shop_items = 2;
+    bool paid = 3;
+    bool submitted = 4;
+    bool completed = 5;
+    bool canceled = 6;
+    double total_price = 7;
+    string account_email = 8;
+    string cancel_reason = 9;
+    string delivery_address = 10;
+    google.protobuf.Timestamp delivery_timestamp = 11;
+    Payment payment = 12;
+}
+
