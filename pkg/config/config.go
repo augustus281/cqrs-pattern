@@ -8,6 +8,7 @@ type Config struct {
 	EventStore     EventStoreConfig     `mapstructure:"event_store"`
 	ElasticSearch  ElasticSearchConfig  `mapstructure:"elastic_search"`
 	ElasticIndexes ElasticIndexesConfig `mapstructure:"elastic_indexes"`
+	ServiceName    ServiceNameConfig    `mapstructure:"service_name"`
 }
 
 type ServerConfig struct {
@@ -60,4 +61,8 @@ type ElasticIndexesConfig struct {
 
 type EventStoreConfig struct {
 	ConnectionString string `mapstructure:"connection_string"`
+}
+
+type ServiceNameConfig struct {
+	ServiceName string `mapstruct:"service_name"`
 }

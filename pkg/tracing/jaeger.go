@@ -16,10 +16,11 @@ import (
 	"go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 
+	"github.com/augustus281/cqrs-pattern/global"
 	"github.com/augustus281/cqrs-pattern/pkg/config"
 )
 
-// Approach 1: Using jaeger 
+// Approach 1: Using jaeger
 func NewJaegerTracer(jaegerCfg *config.JaegerConfig) (opentracing.Tracer, io.Closer, error) {
 	jeagerConfig := &cfg.Configuration{
 		ServiceName: jaegerCfg.ServiceName,
@@ -37,6 +38,7 @@ func NewJaegerTracer(jaegerCfg *config.JaegerConfig) (opentracing.Tracer, io.Clo
 		},
 	}
 
+	global.Logger.Info("new jaeger tracer successfully")
 	return jeagerConfig.NewTracer(cfg.Logger(jaeger.StdLogger))
 }
 

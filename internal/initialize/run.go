@@ -11,7 +11,7 @@ func Run() {
 	LoadConfig()
 	InitLogger()
 	InitDB()
-	StartTracing()
+	InitJeagerTracer()
 	InitEventStoreDB()
 	_, err := InitElasticSearch()
 	if err != nil {
