@@ -13,6 +13,21 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  mongodb:
+    container_name: mongodb_container
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGODB_DATABASE: shop
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - microservices
+
   evenstore.db:
     image: ghcr.io/eventstore/eventstore@sha256:ab30bf2a2629e2c8710f8f7fdcb74df5466c6b3b2200c8e9ad8a797ed138012a
     environment:
@@ -115,6 +130,8 @@ services:
 
 volumes:
   db:
+  mongodb_data:
+    driver: local
   eventstore-volume-data:
   eventstore-volume-logs:
   es-data01:

@@ -101,7 +101,7 @@ message Payment {
 message ShopItem {
     string id = 1;
     string title = 2;
-    string desription = 3;
+    string description = 3;
     uint64 quantity = 4;
     double price = 5;
 }

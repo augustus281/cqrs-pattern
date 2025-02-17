@@ -10,6 +10,14 @@ db:
   maxOpenConns: 100
   connMaxLifetime: 3600
 
+mongo:
+  uri: "mongodb://localhost:27017"
+  user: admin
+  password: admin
+  db: shop
+mongo_collections:
+  shop: orders
+  
 log:
   log_level: debug
   file_log_name: "./storages/logs/dev.001.log"
