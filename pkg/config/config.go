@@ -3,6 +3,7 @@ package config
 type Config struct {
 	Server         ServerConfig         `mapstructure:"config"`
 	PostgreSQL     PostgreSQLConfig     `mapstructure:"postgresql"`
+	MongoDB        MongoDBConfig        `mapstructure:"mongo"`
 	Logger         LoggerConfig         `mapstructure:"logger"`
 	Jaeger         JaegerConfig         `mapstructure:"jaeger"`
 	EventStore     EventStoreConfig     `mapstructure:"event_store"`
@@ -27,6 +28,13 @@ type PostgreSQLConfig struct {
 	MaxIdleConns    int    `mapstructure:"maxIdleConns"`
 	MaxOpenConns    int    `mapstructure:"maxOpenConns"`
 	ConnMaxLifetime int    `mapstructure:"connMaxLifetime"`
+}
+
+type MongoDBConfig struct {
+	URI      string `mapstructure:"uri"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
+	Db       string `mapstructure:"db"`
 }
 
 type LoggerConfig struct {
