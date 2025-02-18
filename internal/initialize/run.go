@@ -9,21 +9,31 @@ import (
 	"github.com/augustus281/cqrs-pattern/global"
 )
 
-func Run() {
+func (s *server) Run() {
 	LoadConfig()
 	InitLogger()
-	InitDB()
+
+	postgresConn, err := InitDB()
+	if err != nil {
+		global.Logger.Error("error to init postgresql database", zap.Error(err))
+	}
+	s.postgresConn = postgresConn
+
 	InitJeagerTracer()
 	InitEventStoreDB()
-	_, err := InitElasticSearch()
+
+	elasticClient, err := InitElasticSearch()
 	if err != nil {
 		global.Logger.Error("errot to init elastic search", zap.Error(err))
 	}
+	s.elasticClient = elasticClient
 
-	_, err = InitMongoDB(context.Background())
+	mongoDBConn, err := InitMongoDB(context.Background())
 	if err != nil {
 		global.Logger.Error("error to init mongoDB", zap.Error(err))
 	}
+	s.mongoClient = mongoDBConn
+	defer mongoDBConn.Disconnect(context.TODO())
 
 	r := InitRouter()
 	serverAddr := fmt.Sprintf(":%v", global.Config.Server.Port)

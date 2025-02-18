@@ -1,3 +1,16 @@
+grpc:
+  port: 8088
+  development: true
+
+probes:
+  readinessPath: /ready
+  livenessPath: /live
+  port: 3001
+  pprof: 6001
+  prometheusPath: /metrics
+  prometheusPort: 8001
+  checkIntervalSeconds: 10
+
 db:
   host: postgres16
   port: 5432
