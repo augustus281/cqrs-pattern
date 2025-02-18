@@ -2,6 +2,8 @@ package config
 
 type Config struct {
 	Server         ServerConfig         `mapstructure:"config"`
+	GRPC           GRPCConfig           `mapstructure:"grpc"`
+	Probes         ProbesConfig         `mapstructure:"probes"`
 	PostgreSQL     PostgreSQLConfig     `mapstructure:"postgresql"`
 	MongoDB        MongoDBConfig        `mapstructure:"mongo"`
 	Logger         LoggerConfig         `mapstructure:"logger"`
@@ -73,4 +75,19 @@ type EventStoreConfig struct {
 
 type ServiceNameConfig struct {
 	ServiceName string `mapstruct:"service_name"`
+}
+
+type GRPCConfig struct {
+	Port        int  `mapstructure:"port"`
+	Development bool `mapstructure:"development"`
+}
+
+type ProbesConfig struct {
+	LivenessPath         string `mapstructure:"livenessPath"`
+	ReadinessPath        string `mapstructure:"readinessPath"`
+	Port                 int    `mapstructure:"port"`
+	Pprof                string `mapstructure:"pprof"`
+	PrometheusPath       string `mapstructure:"prometheusPath"`
+	PrometheusPort       int    `mapstructure:"prometheusPort"`
+	CheckIntervalSeconds int    `mapstructure:"checkIntervalSeconds"`
 }
