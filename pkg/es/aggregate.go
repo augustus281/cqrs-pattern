@@ -43,8 +43,8 @@ type AggregateRoot interface {
 	ToSnapshot()
 	SetType(aggregateType AggregateType)
 	GetType() AggregateType
-	SetAppliesEvents(events []Event)
-	GetAppliesEvents() []Event
+	SetAppliedEvents(events []Event)
+	GetAppliedEvents() []Event
 	RaiseEvent(event Event) error
 	String() string
 	Load
@@ -171,7 +171,7 @@ func (a *AggregateBase) RaiseEvent(event Event) error {
 }
 
 // ToSnapshot prepare AggregateBase for saving Snapshot.
-func (a *AggregateBase) ToSnapShot() {
+func (a *AggregateBase) ToSnapshot() {
 	if a.withAppliedEvents {
 		a.AppliedEvents = append(a.AppliedEvents, a.UncommittedEvents...)
 	}

@@ -10,22 +10,22 @@ import (
 	"github.com/augustus281/cqrs-pattern/pkg/es"
 )
 
-type SubmitOrder interface {
-	Handle(ctx context.Context, command *SubmitOrderCommand) error
+type UpdateShoppingCart interface {
+	Handle(ctx context.Context, command *UpdateShoppingCartCommand) error
 }
 
-type submitOrder struct {
+type updateShoppingCart struct {
 	es es.AggregateStore
 }
 
-func NewSubmitOrder(es es.AggregateStore) SubmitOrder {
-	return &submitOrder{
+func NewUpdateShoppingCart(es es.AggregateStore) UpdateShoppingCart {
+	return &updateShoppingCart{
 		es: es,
 	}
 }
 
-func (c *submitOrder) Handle(ctx context.Context, command *SubmitOrderCommand) error {
-	span, ctx := opentracing.StartSpanFromContext(ctx, "submitOrder.Handle")
+func (c *updateShoppingCart) Handle(ctx context.Context, command *UpdateShoppingCartCommand) error {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "updateShoppingCart.Handle")
 	defer span.Finish()
 	span.LogFields(log.String("AggregateID", command.GetAggregateID()))
 
@@ -34,7 +34,7 @@ func (c *submitOrder) Handle(ctx context.Context, command *SubmitOrderCommand) e
 		return err
 	}
 
-	if err := order.SubmitOrder(ctx); err != nil {
+	if err := order.UpdateShoppingCart(ctx, command.ShopItems); err != nil {
 		return err
 	}
 

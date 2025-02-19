@@ -9,3 +9,5 @@ docker-up:
 generate-proto:
 	cd api && protoc --go_out=. --go-grpc_opt=require_unimplemented_servers=false --go-grpc_out=. order.proto
 .PHONY: run migrate_up sqlc docker-up generate-proto
+
+# Migration
