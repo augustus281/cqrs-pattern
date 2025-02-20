@@ -19,6 +19,7 @@ func (s *server) Run() {
 	}
 	s.postgresConn = postgresConn
 
+	InitRedis()
 	InitJeagerTracer()
 	InitEventStoreDB()
 

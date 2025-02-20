@@ -23,6 +23,12 @@ db:
   maxOpenConns: 100
   connMaxLifetime: 3600
 
+redis: 
+  host: localhost 
+  port: 6380 
+  password: "" 
+  database: 0
+
 mongo:
   uri: "mongodb://localhost:27017"
   user: admin
@@ -38,6 +44,8 @@ log:
   max_backups: 3
   max_age: 28
   compress: true
+
+  
 
 server:
   port: 8080

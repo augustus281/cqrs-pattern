@@ -21,7 +21,6 @@ func InitDB() (*sql.DB, error) {
 	)
 
 	conn, err := sql.Open("postgres", connStr)
-	defer conn.Close()
 	if err != nil {
 		fmt.Println("Failed to connect database", err)
 		return nil, err
