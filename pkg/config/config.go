@@ -1,17 +1,19 @@
 package config
 
 type Config struct {
-	Server         ServerConfig         `mapstructure:"config"`
-	GRPC           GRPCConfig           `mapstructure:"grpc"`
-	Probes         ProbesConfig         `mapstructure:"probes"`
-	PostgreSQL     PostgreSQLConfig     `mapstructure:"postgresql"`
-	MongoDB        MongoDBConfig        `mapstructure:"mongo"`
-	Logger         LoggerConfig         `mapstructure:"logger"`
-	Jaeger         JaegerConfig         `mapstructure:"jaeger"`
-	EventStore     EventStoreConfig     `mapstructure:"event_store"`
-	ElasticSearch  ElasticSearchConfig  `mapstructure:"elastic_search"`
-	ElasticIndexes ElasticIndexesConfig `mapstructure:"elastic_indexes"`
-	ServiceName    ServiceNameConfig    `mapstructure:"service_name"`
+	Server             ServerConfig           `mapstructure:"config"`
+	GRPC               GRPCConfig             `mapstructure:"grpc"`
+	Probes             ProbesConfig           `mapstructure:"probes"`
+	PostgreSQL         PostgreSQLConfig       `mapstructure:"postgresql"`
+	Redis              RedisConfig            `mapstructure:"redis"`
+	MongoDB            MongoDBConfig          `mapstructure:"mongo"`
+	MongoDBCollections MongoCollectionsConfig `mapstructure:"mongo_collections"`
+	Logger             LoggerConfig           `mapstructure:"logger"`
+	Jaeger             JaegerConfig           `mapstructure:"jaeger"`
+	EventStore         EventStoreConfig       `mapstructure:"event_store"`
+	ElasticSearch      ElasticSearchConfig    `mapstructure:"elastic_search"`
+	ElasticIndexes     ElasticIndexesConfig   `mapstructure:"elastic_indexes"`
+	ServiceName        ServiceNameConfig      `mapstructure:"service_name"`
 }
 
 type ServerConfig struct {
@@ -32,11 +34,22 @@ type PostgreSQLConfig struct {
 	ConnMaxLifetime int    `mapstructure:"connMaxLifetime"`
 }
 
+type RedisConfig struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Password string `mapstructure:"password"`
+	Database int    `mapstructure:"database"`
+}
+
 type MongoDBConfig struct {
 	URI      string `mapstructure:"uri"`
 	User     string `mapstructure:"user"`
 	Password string `mapstructure:"password"`
 	Db       string `mapstructure:"db"`
+}
+
+type MongoCollectionsConfig struct {
+	Shop string `mapstructure:"orders" validate:"required"`
 }
 
 type LoggerConfig struct {
