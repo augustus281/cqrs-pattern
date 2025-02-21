@@ -8,7 +8,7 @@ import (
 	"github.com/augustus281/cqrs-pattern/global"
 )
 
-func LoadConfig() {
+func (s *server) LoadConfig() {
 	viper := viper.New()
 	viper.AddConfigPath("./configs")
 	viper.SetConfigName("config")

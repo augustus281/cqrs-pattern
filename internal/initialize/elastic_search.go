@@ -7,7 +7,7 @@ import (
 	"github.com/augustus281/cqrs-pattern/global"
 )
 
-func InitElasticSearch() (*v7.Client, error) {
+func (s *server) InitElasticSearch() (*v7.Client, error) {
 	client, err := v7.NewClient(
 		v7.SetURL(global.Config.ElasticSearch.Url),
 		v7.SetSniff(global.Config.ElasticSearch.Sniff),

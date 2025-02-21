@@ -17,7 +17,7 @@ const (
 	_maxPoolSize     = 300
 )
 
-func InitMongoDB(ctx context.Context) (*mongo.Client, error) {
+func (s *server) InitMongoDB(ctx context.Context) (*mongo.Client, error) {
 	clientOptions := options.Client().
 		ApplyURI(global.Config.MongoDB.URI).
 		SetConnectTimeout(_connectTimeout).

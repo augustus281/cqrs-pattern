@@ -10,7 +10,7 @@ import (
 	"github.com/augustus281/cqrs-pattern/global"
 )
 
-func InitDB() (*sql.DB, error) {
+func (s *server) InitDB() (*sql.DB, error) {
 	connStr := fmt.Sprintf(
 		"postgresql://%s:%s@%s:%d/%s?sslmode=disable",
 		"root",
