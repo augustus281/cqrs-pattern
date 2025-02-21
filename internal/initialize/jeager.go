@@ -9,7 +9,7 @@ import (
 )
 
 // Approach 1: Using jaeger
-func InitJeagerTracer() {
+func (s *server) InitJeagerTracer() {
 	if global.Config.Jaeger.Enable {
 		tracer, closer, err := tracing.NewJaegerTracer(&global.Config.Jaeger)
 		if err != nil {

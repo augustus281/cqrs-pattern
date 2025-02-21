@@ -3,6 +3,9 @@ package initialize
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"go.uber.org/zap"
 
@@ -10,33 +13,39 @@ import (
 )
 
 func (s *server) Run() {
-	LoadConfig()
-	InitLogger()
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	defer cancel()
 
-	postgresConn, err := InitDB()
+	s.LoadConfig()
+	s.InitLogger()
+
+	postgresConn, err := s.InitDB()
 	if err != nil {
 		global.Logger.Error("error to init postgresql database", zap.Error(err))
 	}
 	s.postgresConn = postgresConn
 
-	InitRedis()
-	InitJeagerTracer()
-	InitEventStoreDB()
+	s.InitRedis(ctx)
+	s.InitJeagerTracer()
 
-	elasticClient, err := InitElasticSearch()
+	mongoDBConn, err := s.InitMongoDB(ctx)
+	if err != nil {
+		global.Logger.Error("error to init mongoDB", zap.Error(err))
+	}
+	s.mongoClient = mongoDBConn
+	defer mongoDBConn.Disconnect(ctx)
+
+	elasticClient, err := s.InitElasticSearch()
 	if err != nil {
 		global.Logger.Error("errot to init elastic search", zap.Error(err))
 	}
 	s.elasticClient = elasticClient
 
-	mongoDBConn, err := InitMongoDB(context.Background())
-	if err != nil {
-		global.Logger.Error("error to init mongoDB", zap.Error(err))
-	}
-	s.mongoClient = mongoDBConn
-	defer mongoDBConn.Disconnect(context.TODO())
+	s.InitEventStoreDB()
 
-	r := InitRouter()
+	s.RunHealthCheck(ctx)
+
+	r := s.InitRouter()
 	serverAddr := fmt.Sprintf(":%v", global.Config.Server.Port)
 	r.Run(serverAddr)
 }

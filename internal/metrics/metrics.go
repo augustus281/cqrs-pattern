@@ -3,9 +3,10 @@ package metrics
 import (
 	"fmt"
 
-	"github.com/augustus281/cqrs-pattern/global"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+
+	"github.com/augustus281/cqrs-pattern/global"
 )
 
 type ESMicroserviceMetrics struct {

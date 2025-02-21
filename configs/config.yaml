@@ -5,14 +5,14 @@ grpc:
 probes:
   readinessPath: /ready
   livenessPath: /live
-  port: 3001
-  pprof: 6001
+  port: :3001
+  pprof: :6001
   prometheusPath: /metrics
   prometheusPort: 8001
   checkIntervalSeconds: 10
 
-db:
-  host: postgres16
+postgres:
+  host: localhost
   port: 5432
   username: root
   password: mysecurepassword
@@ -45,11 +45,10 @@ log:
   max_age: 28
   compress: true
 
-  
-
 server:
   port: 8080
   mode: "dev"
+  debug: true
 
 jaeger:
   enable: true

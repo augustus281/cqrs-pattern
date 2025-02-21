@@ -5,6 +5,6 @@ import (
 	"github.com/augustus281/cqrs-pattern/pkg/logger"
 )
 
-func InitLogger() {
+func (s *server) InitLogger() {
 	global.Logger = logger.NewLogger(global.Config.Logger)
 }

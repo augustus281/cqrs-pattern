@@ -5,7 +5,7 @@ import (
 	"github.com/augustus281/cqrs-pattern/pkg/eventstoredb"
 )
 
-func InitEventStoreDB() {
+func (s *server) InitEventStoreDB() {
 	db, err := eventstoredb.NewEventStoreDB(&global.Config.EventStore)
 	if err != nil {
 		global.Logger.Error("init event store db failed!")

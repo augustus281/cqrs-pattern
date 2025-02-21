@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
+func (s *server) InitRouter() *gin.Engine {
 	var r *gin.Engine
 	if global.Config.Server.Mode == "dev" {
 		gin.SetMode(gin.DebugMode)

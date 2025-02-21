@@ -10,9 +10,7 @@ import (
 	"github.com/augustus281/cqrs-pattern/global"
 )
 
-var _ctx = context.Background()
-
-func InitRedis() {
+func (s *server) InitRedis(ctx context.Context) {
 	r := global.Config.Redis
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%v", r.Host, r.Port),
@@ -21,7 +19,7 @@ func InitRedis() {
 		PoolSize: 10,
 	})
 
-	_, err := rdb.Ping(_ctx).Result()
+	_, err := rdb.Ping(ctx).Result()
 	if err != nil {
 		global.Logger.Error("Redis initialization error: %v", zap.Error(err))
 		panic(err)

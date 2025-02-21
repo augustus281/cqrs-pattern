@@ -3,10 +3,10 @@ package initialize
 import (
 	"context"
 	"fmt"
-	"go.uber.org/zap"
 	"net/http"
-	"strconv"
 	"time"
+
+	"go.uber.org/zap"
 
 	"github.com/heptiolabs/healthcheck"
 
@@ -25,7 +25,7 @@ func (s *server) RunHealthCheck(ctx context.Context) {
 	mux := http.NewServeMux()
 	s.probeServer = &http.Server{
 		Handler:      mux,
-		Addr:         strconv.Itoa(global.Config.Probes.Port),
+		Addr:         global.Config.Probes.Port,
 		WriteTimeout: _writeTimeout,
 		ReadTimeout:  _readTimeout,
 	}
@@ -35,7 +35,7 @@ func (s *server) RunHealthCheck(ctx context.Context) {
 	s.configureHealthCheck(ctx, health)
 
 	go func() {
-		global.Logger.Info(fmt.Sprintf("(%s) Kubernetes probes listening on port: %d", global.Config.ServiceName, global.Config.Probes.Port))
+		global.Logger.Info(fmt.Sprintf("(%s) Kubernetes probes listening on port: {%s}", global.Config.ServiceName, global.Config.Probes.Port))
 		if err := s.probeServer.ListenAndServe(); err != nil {
 			global.Logger.Error("(ListenAndServe) err:", zap.Error(err))
 		}

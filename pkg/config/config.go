@@ -1,10 +1,10 @@
 package config
 
 type Config struct {
-	Server             ServerConfig           `mapstructure:"config"`
+	Server             ServerConfig           `mapstructure:"server"`
 	GRPC               GRPCConfig             `mapstructure:"grpc"`
 	Probes             ProbesConfig           `mapstructure:"probes"`
-	PostgreSQL         PostgreSQLConfig       `mapstructure:"postgresql"`
+	PostgreSQL         PostgreSQLConfig       `mapstructure:"postgres"`
 	Redis              RedisConfig            `mapstructure:"redis"`
 	MongoDB            MongoDBConfig          `mapstructure:"mongo"`
 	MongoDBCollections MongoCollectionsConfig `mapstructure:"mongo_collections"`
@@ -17,8 +17,9 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Port int    `mapstructure:"port"`
-	Mode string `mapstructure:"mode"`
+	Port  int    `mapstructure:"port"`
+	Mode  string `mapstructure:"mode"`
+	Debug bool   `mapstructure:"debug"`
 }
 
 type PostgreSQLConfig struct {
@@ -98,7 +99,7 @@ type GRPCConfig struct {
 type ProbesConfig struct {
 	LivenessPath         string `mapstructure:"livenessPath"`
 	ReadinessPath        string `mapstructure:"readinessPath"`
-	Port                 int    `mapstructure:"port"`
+	Port                 string `mapstructure:"port"`
 	Pprof                string `mapstructure:"pprof"`
 	PrometheusPath       string `mapstructure:"prometheusPath"`
 	PrometheusPort       int    `mapstructure:"prometheusPort"`
