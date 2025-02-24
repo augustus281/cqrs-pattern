@@ -65,6 +65,8 @@ const (
 	Bcrypt          = "bcrypt"
 	SQLState        = "sqlstate"
 
+	MessageSize = "MessageSize"
+
 	MongoProjection   = "(MongoDB Projection)"
 	ElasticProjection = "(Elastic Projection)"
 
@@ -78,4 +80,6 @@ const (
 	Paid            = "paid"
 	Canceled        = "canceled"
 	CancelReason    = "cancel_reason"
+
+	KafkaHeaders = "kafkaHeaders"
 )

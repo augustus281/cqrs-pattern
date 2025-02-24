@@ -72,3 +72,14 @@ elastic_indexes:
   orders: "orders"
 
 service_name: es_service
+
+kafka: 
+  brokers: "localhost:9093"
+  group_id: order_microservice_consumer
+  init_topics: true
+
+kafka_topics:
+  event_created:
+    topic_name: event_created
+    partitions: 10
+    replication_factor: 1
