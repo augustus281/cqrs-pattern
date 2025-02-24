@@ -14,6 +14,8 @@ type Config struct {
 	ElasticSearch      ElasticSearchConfig    `mapstructure:"elastic_search"`
 	ElasticIndexes     ElasticIndexesConfig   `mapstructure:"elastic_indexes"`
 	ServiceName        ServiceNameConfig      `mapstructure:"service_name"`
+	Kafka              KafkaConfig            `mapstructure:"kafka"`
+	KafkaTopics        KafkaTopicsConfig      `mapstructure:"kafka_topics"`
 }
 
 type ServerConfig struct {
@@ -88,7 +90,23 @@ type EventStoreConfig struct {
 }
 
 type ServiceNameConfig struct {
-	ServiceName string `mapstruct:"service_name"`
+	ServiceName string `mapstructure:"service_name"`
+}
+
+type KafkaConfig struct {
+	Brokers    []string `mapstructure:"brokers"`
+	GroupID    string   `mapstructure:"group_id"`
+	InitTopics bool     `mapstructure:"init_topics"`
+}
+
+type KafkaTopicsConfig struct {
+	EventCreated EventCreated `mapstructure:"event_created"`
+}
+
+type EventCreated struct {
+	TopicName         string `mapstructure:"topic_name"`
+	Partitions        int    `mapstructure:"partitions"`
+	ReplicationFactor int    `mapstructure:"replication_factor"`
 }
 
 type GRPCConfig struct {
