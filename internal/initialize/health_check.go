@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"go.uber.org/zap"
-
 	"github.com/heptiolabs/healthcheck"
 
 	"github.com/augustus281/cqrs-pattern/global"
@@ -76,4 +75,8 @@ func (s *server) configureHealthCheck(ctx context.Context, health healthcheck.Ha
 		}
 		return nil
 	}, time.Duration(global.Config.Probes.CheckIntervalSeconds)*time.Second))
+}
+
+func (s *server) shutDownHealthCheckServer(ctx context.Context) error {
+	return s.probeServer.Shutdown(ctx)
 }

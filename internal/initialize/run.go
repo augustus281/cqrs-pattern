@@ -10,6 +10,8 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/augustus281/cqrs-pattern/global"
+	v1 "github.com/augustus281/cqrs-pattern/internal/order/delivery/http/v1"
+	"github.com/gin-gonic/gin"
 )
 
 func (s *server) Run() {
@@ -44,6 +46,9 @@ func (s *server) Run() {
 	s.InitEventStoreDB()
 
 	s.RunHealthCheck(ctx)
+
+	orderHandlers := v1.NewOrderHandlers(&gin.RouterGroup{}, s.validate, s.orderService, s.metrics)
+	orderHandlers.MapRoutes()
 
 	r := s.InitRouter()
 	serverAddr := fmt.Sprintf(":%v", global.Config.Server.Port)
