@@ -16,6 +16,7 @@ type Config struct {
 	ServiceName        ServiceNameConfig      `mapstructure:"service_name"`
 	Kafka              KafkaConfig            `mapstructure:"kafka"`
 	KafkaTopics        KafkaTopicsConfig      `mapstructure:"kafka_topics"`
+	KafkaPublisher     KafkaPublisherConfig   `mapstructure:"kafka_publisher"`
 }
 
 type ServerConfig struct {
@@ -25,16 +26,18 @@ type ServerConfig struct {
 }
 
 type PostgreSQLConfig struct {
-	Host            string `mapstructure:"host"`
-	Port            int    `mapstructure:"port"`
-	Username        string `mapstructure:"username"`
-	Password        string `mapstructure:"password"`
-	DBName          string `mapstructure:"dbname"`
-	SslMode         string `mapstructure:"sslmode"`
-	Timezone        string `mapstructure:"timezone"`
-	MaxIdleConns    int    `mapstructure:"maxIdleConns"`
-	MaxOpenConns    int    `mapstructure:"maxOpenConns"`
-	ConnMaxLifetime int    `mapstructure:"connMaxLifetime"`
+	Host             string `mapstructure:"host"`
+	Port             int    `mapstructure:"port"`
+	Username         string `mapstructure:"username"`
+	Password         string `mapstructure:"password"`
+	DBName           string `mapstructure:"dbname"`
+	SslMode          string `mapstructure:"sslmode"`
+	Timezone         string `mapstructure:"timezone"`
+	MaxIdleConns     int    `mapstructure:"maxIdleConns"`
+	MaxOpenConns     int    `mapstructure:"maxOpenConns"`
+	ConnMaxLifetime  int    `mapstructure:"connMaxLifetime"`
+	InitMilliseconds int    `mapstructure:"init_milliseconds"`
+	InitRetryCount   int    `mapstructure:"init_retry_count"`
 }
 
 type RedisConfig struct {
@@ -101,6 +104,13 @@ type KafkaConfig struct {
 
 type KafkaTopicsConfig struct {
 	EventCreated EventCreated `mapstructure:"event_created"`
+}
+
+type KafkaPublisherConfig struct {
+	Topic             string `mapstructure:"topic"`
+	TopicPrefix       string `mapstructure:"topic_prefix"`
+	Partitions        int    `mapstructure:"partitions"`
+	ReplicationFactor int    `mapstructure:"replication_factor"`
 }
 
 type EventCreated struct {
