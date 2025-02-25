@@ -8,10 +8,10 @@ import (
 	"syscall"
 
 	"go.uber.org/zap"
+	"github.com/gin-gonic/gin"
 
 	"github.com/augustus281/cqrs-pattern/global"
 	v1 "github.com/augustus281/cqrs-pattern/internal/order/delivery/http/v1"
-	"github.com/gin-gonic/gin"
 )
 
 func (s *server) Run() {
@@ -20,12 +20,6 @@ func (s *server) Run() {
 
 	s.LoadConfig()
 	s.InitLogger()
-
-	// postgresConn, err := s.InitDB()
-	// if err != nil {
-	// 	global.Logger.Error("error to init postgresql database", zap.Error(err))
-	// }
-	// s.postgresConn = postgresConn
 
 	s.InitRedis(ctx)
 	s.InitJeagerTracer()
