@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"go.uber.org/zap"
 	"github.com/heptiolabs/healthcheck"
+	"go.uber.org/zap"
 
 	"github.com/augustus281/cqrs-pattern/global"
 	"github.com/augustus281/cqrs-pattern/pkg/constants"
@@ -44,7 +44,7 @@ func (s *server) RunHealthCheck(ctx context.Context) {
 func (s *server) configureHealthCheck(ctx context.Context, health healthcheck.Handler) {
 	// Healthcheck PostgreSQL Database
 	health.AddReadinessCheck(constants.Postgres, healthcheck.AsyncWithContext(ctx, func() error {
-		if err := s.postgresConn.Ping(); err != nil {
+		if err := s.pgxConn.Ping(ctx); err != nil {
 			global.Logger.Warn("Postgres Readiness Check", zap.Error(err))
 			return err
 		}
@@ -52,7 +52,7 @@ func (s *server) configureHealthCheck(ctx context.Context, health healthcheck.Ha
 	}, time.Duration(global.Config.Probes.CheckIntervalSeconds)*time.Second))
 
 	health.AddLivenessCheck(constants.Postgres, healthcheck.AsyncWithContext(ctx, func() error {
-		if err := s.postgresConn.Ping(); err != nil {
+		if err := s.pgxConn.Ping(ctx); err != nil {
 			global.Logger.Warn("Postgres Liveness Check", zap.Error(err))
 			return err
 		}

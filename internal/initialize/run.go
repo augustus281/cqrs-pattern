@@ -21,14 +21,19 @@ func (s *server) Run() {
 	s.LoadConfig()
 	s.InitLogger()
 
-	postgresConn, err := s.InitDB()
-	if err != nil {
-		global.Logger.Error("error to init postgresql database", zap.Error(err))
-	}
-	s.postgresConn = postgresConn
+	// postgresConn, err := s.InitDB()
+	// if err != nil {
+	// 	global.Logger.Error("error to init postgresql database", zap.Error(err))
+	// }
+	// s.postgresConn = postgresConn
 
 	s.InitRedis(ctx)
 	s.InitJeagerTracer()
+
+	if err := s.InitDBV2(ctx); err != nil {
+		global.Logger.Error("error to init postgresql database", zap.Error(err))
+	}
+	defer s.pgxConn.Close()
 
 	mongoDBConn, err := s.InitMongoDB(ctx)
 	if err != nil {

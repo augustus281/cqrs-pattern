@@ -22,6 +22,8 @@ postgres:
   maxIdleConns: 10
   maxOpenConns: 100
   connMaxLifetime: 3600
+  init_milliseconds: 1500
+  init_retry_count: 3
 
 redis: 
   host: localhost 
@@ -83,3 +85,9 @@ kafka_topics:
     topic_name: event_created
     partitions: 10
     replication_factor: 1
+
+kafka_publisher:
+  topic: event_created
+  topic_prefix: eventstore
+  partitions: 10
+  replication_factor: 1
