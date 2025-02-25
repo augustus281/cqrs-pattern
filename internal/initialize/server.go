@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -18,7 +17,6 @@ type server struct {
 	probeServer   *http.Server
 	mongoClient   *mongo.Client
 	elasticClient *elastic.Client
-	postgresConn  *sql.DB
 	pgxConn       *pgxpool.Pool
 	metrics       *metrics.ESMicroserviceMetrics
 	validate      *validator.Validate
