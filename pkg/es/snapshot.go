@@ -1,6 +1,9 @@
 package es
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // Snapshot Event Sourcing Snapshotting is an optimisation that reduces time spent on reading event from an event store.
 type Snapshot struct {
@@ -22,4 +25,13 @@ func NewSnapshotFromAggregate(aggregate Aggregate) (*Snapshot, error) {
 		State:   aggregateBytes,
 		Version: uint64(aggregate.GetVersion()),
 	}, nil
+}
+
+func (s *Snapshot) String() string {
+	return fmt.Sprintf("AggregateID: %s, Type: %s, StateSize: %d, Version: %d",
+		s.ID,
+		string(s.Type),
+		len(s.State),
+		s.Version,
+	)
 }
