@@ -5,6 +5,7 @@ type Config struct {
 	GRPC               GRPCConfig             `mapstructure:"grpc"`
 	Probes             ProbesConfig           `mapstructure:"probes"`
 	PostgreSQL         PostgreSQLConfig       `mapstructure:"postgres"`
+	Migrations         MigrationConfig        `mapstructure:"migrations"`
 	Redis              RedisConfig            `mapstructure:"redis"`
 	MongoDB            MongoDBConfig          `mapstructure:"mongo"`
 	MongoDBCollections MongoCollectionsConfig `mapstructure:"mongo_collections"`
@@ -38,6 +39,13 @@ type PostgreSQLConfig struct {
 	ConnMaxLifetime  int    `mapstructure:"connMaxLifetime"`
 	InitMilliseconds int    `mapstructure:"init_milliseconds"`
 	InitRetryCount   int    `mapstructure:"init_retry_count"`
+}
+
+type MigrationConfig struct {
+	Enabled  bool   `mapstructure:"enabled"`
+	Recreate bool   `mapstructure:"recreate"`
+	SourceUrl   string `mapstructure:"source_url"`
+	DBUrl    string `mapstructure:"db_url"`
 }
 
 type RedisConfig struct {

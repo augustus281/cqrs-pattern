@@ -60,21 +60,21 @@ func (s *server) configureHealthCheck(ctx context.Context, health healthcheck.Ha
 	}, time.Duration(global.Config.Probes.CheckIntervalSeconds)*time.Second))
 
 	// Healthcheck MongoDB
-	health.AddReadinessCheck(constants.MongoDB, healthcheck.AsyncWithContext(ctx, func() error {
-		if err := s.mongoClient.Ping(ctx, nil); err != nil {
-			global.Logger.Warn("MongoDB Readiness Check", zap.Error(err))
-			return err
-		}
-		return nil
-	}, time.Duration(global.Config.Probes.CheckIntervalSeconds)*time.Second))
+	// health.AddReadinessCheck(constants.MongoDB, healthcheck.AsyncWithContext(ctx, func() error {
+	// 	if err := s.mongoClient.Ping(ctx, nil); err != nil {
+	// 		global.Logger.Warn("MongoDB Readiness Check", zap.Error(err))
+	// 		return err
+	// 	}
+	// 	return nil
+	// }, time.Duration(global.Config.Probes.CheckIntervalSeconds)*time.Second))
 
-	health.AddLivenessCheck(constants.Postgres, healthcheck.AsyncWithContext(ctx, func() error {
-		if err := s.mongoClient.Ping(ctx, nil); err != nil {
-			global.Logger.Warn("MongoDB Liveness Check", zap.Error(err))
-			return err
-		}
-		return nil
-	}, time.Duration(global.Config.Probes.CheckIntervalSeconds)*time.Second))
+	// health.AddLivenessCheck(constants.Postgres, healthcheck.AsyncWithContext(ctx, func() error {
+	// 	if err := s.mongoClient.Ping(ctx, nil); err != nil {
+	// 		global.Logger.Warn("MongoDB Liveness Check", zap.Error(err))
+	// 		return err
+	// 	}
+	// 	return nil
+	// }, time.Duration(global.Config.Probes.CheckIntervalSeconds)*time.Second))
 }
 
 func (s *server) shutDownHealthCheckServer(ctx context.Context) error {

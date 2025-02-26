@@ -25,6 +25,12 @@ postgres:
   init_milliseconds: 1500
   init_retry_count: 3
 
+migrations:
+  enable: true
+  recreate: false
+  source_url: "file://migrations"
+  db_url: "postgres://root:mysecurepassword@localhost:5432/shop?sslmode=disable"
+
 redis: 
   host: localhost 
   port: 6380 

@@ -2,8 +2,8 @@ package initialize
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
+	"github.com/augustus281/cqrs-pattern/pkg/migrations"
 	"time"
 
 	"github.com/avast/retry-go"
@@ -11,7 +11,6 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 
-	database "github.com/augustus281/cqrs-pattern/database/sqlc"
 	"github.com/augustus281/cqrs-pattern/global"
 )
 
@@ -23,29 +22,6 @@ const (
 	minConns          = 10
 	lazyConnect       = false
 )
-
-func (s *server) InitDB() (*sql.DB, error) {
-	connStr := fmt.Sprintf(
-		"postgresql://%s:%s@%s:%d/%s?sslmode=disable",
-		"root",
-		global.Config.PostgreSQL.Password,
-		"localhost",
-		5432,
-		global.Config.PostgreSQL.DBName,
-	)
-
-	conn, err := sql.Open("postgres", connStr)
-	if err != nil {
-		fmt.Println("Failed to connect database", err)
-		return nil, err
-	}
-	conn.SetMaxOpenConns(25)
-	conn.SetMaxIdleConns(25)
-
-	global.Logger.Info("Connect database successfully!")
-	global.Db = database.NewStore(conn)
-	return conn, nil
-}
 
 func (s *server) InitDBV2(ctx context.Context) error {
 	retryOptions := []retry.Option{
@@ -97,4 +73,17 @@ func NewPgxConn(ctx context.Context) (*pgxpool.Pool, error) {
 
 	global.Logger.Info("new pgx conn successfully!")
 	return connPool, nil
+}
+
+func (s *server) runMigrate() error {
+	global.Logger.Info(fmt.Sprintf("Run migrations with config: %+v", global.Config.Migrations))
+
+	version, dirty, err := migrations.RunMigrations()
+	if err != nil {
+		global.Logger.Error(fmt.Sprintf("Run migrations err: %v", err))
+		return err
+	}
+
+	global.Logger.Info(fmt.Sprintf("Migrations successfully created: version: %d, dirty: %v", version, dirty))
+	return nil
 }
