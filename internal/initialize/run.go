@@ -7,8 +7,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"go.uber.org/zap"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 
 	"github.com/augustus281/cqrs-pattern/global"
 	v1 "github.com/augustus281/cqrs-pattern/internal/order/delivery/http/v1"
@@ -28,6 +28,9 @@ func (s *server) Run() {
 		global.Logger.Error("error to init postgresql database", zap.Error(err))
 	}
 	defer s.pgxConn.Close()
+	if err := s.runMigrate(); err != nil {
+		global.Logger.Error("failed to run migration database", zap.Error(err))
+	}
 
 	mongoDBConn, err := s.InitMongoDB(ctx)
 	if err != nil {

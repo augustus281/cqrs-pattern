@@ -1,8 +1,4 @@
--- +goose Up
--- +goose StatementBegin
-SELECT 'up SQL query';
--- +goose StatementEnd
-CREATE TABLE "orders" (
+CREATE TABLE IF NOT EXISTS "orders" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "account_email" VARCHAR(320) NOT NULL,
     "delivery_address" TEXT NOT NULL,
@@ -14,7 +10,7 @@ CREATE TABLE "orders" (
     "canceled" BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE "items" (
+CREATE TABLE IF NOT EXISTS "items" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "description" TEXT,
@@ -23,13 +19,13 @@ CREATE TABLE "items" (
     "order_id" UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE
 );
 
-CREATE TABLE "payments" (
+CREATE TABLE IF NOT EXISTS "payments" (
     "payment_id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "paymented_time" TIMESTAMPTZ NOT NULL,
     "order_id" UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE
 );
 
-CREATE TABLE "events" (
+CREATE TABLE IF NOT EXISTS  "events" (
     event_id UUID DEFAULT gen_random_uuid(),
     aggregate_id   VARCHAR(250) NOT NULL CHECK ( aggregate_id <> '' ),
     aggregate_type VARCHAR(250) NOT NULL CHECK ( aggregate_type <> '' ),
@@ -52,7 +48,7 @@ CREATE TABLE IF NOT EXISTS events_partition_hash_2 PARTITION OF "events"
 CREATE TABLE IF NOT EXISTS events_partition_hash_3 PARTITION OF "events"
     FOR VALUES WITH (MODULUS 3, REMAINDER 2);
 
-CREATE TABLE "snapshots" (
+CREATE TABLE IF NOT EXISTS "snapshots" (
     snapshot_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     aggregate_id   VARCHAR(250) UNIQUE NOT NULL CHECK ( aggregate_id <> '' ),
     aggregate_type VARCHAR(250)        NOT NULL CHECK ( aggregate_type <> '' ),
@@ -64,13 +60,3 @@ CREATE TABLE "snapshots" (
 );
 
 CREATE INDEX IF NOT EXISTS aggregate_id_aggregate_version_idx ON snapshots(aggregate_id, version);
-
--- +goose Down
--- +goose StatementBegin
-SELECT 'down SQL query';
--- +goose StatementEnd
-DROP TABLE "items";
-DROP TABLE "orders";
-DROP TABLE "payments";
-DROP TABLE "events";
-DROP TABLE "snapshots";
