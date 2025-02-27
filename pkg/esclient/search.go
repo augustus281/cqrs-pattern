@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/augustus281/cqrs-pattern/pkg/es"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 )
 
@@ -25,7 +26,7 @@ func SearchMatchPhrasePrefix[T any](ctx context.Context, transport esapi.Transpo
 		searchQuery["sort"] = []interface{}{"_score", request.SortMap}
 	}
 
-	queryBytes, err := serializer.Marshal(searchQuery)
+	queryBytes, err := es.Marshal(searchQuery)
 	if err != nil {
 		return nil, err
 	}
