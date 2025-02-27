@@ -45,6 +45,9 @@ func (s *server) Run() {
 	}
 	s.elasticClient = elasticClient
 
+	// connect elastic
+	// elasticInfoResponse, err := es
+
 	s.InitEventStoreDB()
 
 	s.RunHealthCheck(ctx)
