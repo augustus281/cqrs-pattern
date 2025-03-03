@@ -1,8 +1,9 @@
 package initialize
 
 import (
+	"fmt"
 	"net"
-	"strconv"
+	"strings"
 	"time"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -10,11 +11,14 @@ import (
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
+	"google.golang.org/grpc/reflection"
 
+	orderService "github.com/augustus281/cqrs-pattern/api"
 	"github.com/augustus281/cqrs-pattern/global"
-	"github.com/augustus281/cqrs-pattern/pkg/constants"
+	grpc2 "github.com/augustus281/cqrs-pattern/internal/order/delivery/grpc"
 )
 
 const (
@@ -24,8 +28,8 @@ const (
 	_gRPCTime          = 10
 )
 
-func (s *server) newGRPCServer() (func() error, *grpc.Server, error) {
-	listen, err := net.Listen(constants.Tcp, strconv.Itoa(global.Config.GRPC.Port))
+func (s *server) newGRPCServer() (func(), *grpc.Server, error) {
+	listen, err := net.Listen("tcp", ":8088")
 	if err != nil {
 		return nil, nil, errors.Wrapf(err, "net.Listen")
 	}
@@ -41,9 +45,40 @@ func (s *server) newGRPCServer() (func() error, *grpc.Server, error) {
 			grpc_ctxtags.UnaryServerInterceptor(),
 			grpc_prometheus.UnaryServerInterceptor,
 			grpc_recovery.UnaryServerInterceptor(),
-			nil,
+			s.interceptor.Logger,
 		)),
 	)
 
-	return listen.Close, grpcServer, nil
+	grpcService := grpc2.NewOrderGrpcService(s.orderService, s.validate, s.metrics)
+	orderService.RegisterOrderServiceServer(grpcServer, grpcService)
+	grpc_prometheus.Register(grpcServer)
+
+	if global.Config.GRPC.Development {
+		reflection.Register(grpcServer)
+	}
+
+	go func() {
+		global.Logger.Info(fmt.Sprintf("%s gRPC server is starting on port: %d", GetMicroserviceName(), global.Config.GRPC.Port))
+
+		if err := grpcServer.Serve(listen); err != nil {
+			if errors.Is(err, net.ErrClosed) {
+				global.Logger.Warn("⚠️ gRPC server đã đóng.")
+			} else {
+				global.Logger.Fatal("🚨 gRPC server dừng do lỗi nghiêm trọng", zap.Error(err))
+			}
+		}
+	}()
+
+	shutdown := func() {
+		global.Logger.Info("🔄 Đang dừng gRPC server...")
+		grpcServer.GracefulStop()
+		listen.Close()
+		global.Logger.Info("✅ gRPC server đã dừng.")
+	}
+
+	return shutdown, grpcServer, nil
+}
+
+func GetMicroserviceName() string {
+	return fmt.Sprintf("(%s)", strings.ToUpper(global.Config.ServiceName.ServiceName))
 }

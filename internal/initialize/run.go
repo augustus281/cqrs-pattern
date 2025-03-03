@@ -2,16 +2,16 @@ package initialize
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
 	"github.com/augustus281/cqrs-pattern/global"
-	v1 "github.com/augustus281/cqrs-pattern/internal/order/delivery/http/v1"
+	"github.com/augustus281/cqrs-pattern/internal/metrics"
+	"github.com/augustus281/cqrs-pattern/pkg/interceptors"
 )
 
 func (s *server) Run() {
@@ -23,6 +23,8 @@ func (s *server) Run() {
 
 	s.InitRedis(ctx)
 	s.InitJeagerTracer()
+	s.metrics = metrics.NewESMicroserviceMetrics()
+	s.interceptor = interceptors.NewInterceptorManager(s.getGrpcMetricsCb())
 
 	if err := s.InitDBV2(ctx); err != nil {
 		global.Logger.Error("error to init postgresql database", zap.Error(err))
@@ -45,17 +47,30 @@ func (s *server) Run() {
 	}
 	s.elasticClient = elasticClient
 
-	// connect elastic
-	// elasticInfoResponse, err := es
-
 	s.InitEventStoreDB()
 
 	s.RunHealthCheck(ctx)
 
-	orderHandlers := v1.NewOrderHandlers(&gin.RouterGroup{}, s.validate, s.orderService, s.metrics)
-	orderHandlers.MapRoutes()
+	go s.runHttpServer()
 
-	r := s.InitRouter()
-	serverAddr := fmt.Sprintf(":%v", global.Config.Server.Port)
-	r.Run(serverAddr)
+	shutdown, _, err := s.newGRPCServer()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	<-c
+	shutdown()
+}
+
+func (s *server) getGrpcMetricsCb() func(err error) {
+	return func(err error) {
+		if err != nil {
+			s.metrics.ErrorGrpcRequests.Inc()
+		} else {
+			s.metrics.SuccessGrpcRequests.Inc()
+		}
+	}
 }

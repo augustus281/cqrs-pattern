@@ -3,6 +3,7 @@ README.md
 vendor
 
 .idea
+.vscode
 
 kafka_data
 
