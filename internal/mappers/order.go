@@ -2,8 +2,26 @@ package mappers
 
 import (
 	"github.com/augustus281/cqrs-pattern/internal/dto"
+	"github.com/augustus281/cqrs-pattern/internal/order/aggregate"
 	"github.com/augustus281/cqrs-pattern/internal/order/models"
 )
+
+func OrderProjectionFromAggregate(orderAggregate *aggregate.OrderAggregate) *models.OrderProjection {
+	return &models.OrderProjection{
+		OrderID:         aggregate.GetOrderAggregateID(orderAggregate.GetID()),
+		ShopItems:       orderAggregate.Order.ShopItems,
+		Paid:            orderAggregate.Order.Paid,
+		Submitted:       orderAggregate.Order.Submitted,
+		Completed:       orderAggregate.Order.Completed,
+		Canceled:        orderAggregate.Order.Canceled,
+		AccountEmail:    orderAggregate.Order.AccountEmail,
+		TotalPrice:      orderAggregate.Order.TotalPrice,
+		DeliveredTime:   orderAggregate.Order.DeliveredTime,
+		CancelReason:    orderAggregate.Order.CancelReason,
+		DeliveryAddress: orderAggregate.Order.DeliveryAddress,
+		Payment:         orderAggregate.Order.Payment,
+	}
+}
 
 func OrderResponseFromProjection(projection *models.OrderProjection) dto.OrderResponseDto {
 	return dto.OrderResponseDto{
