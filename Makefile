@@ -1,5 +1,6 @@
 run:
-	go run cmd/main.go & envoy -c gateway/envoy.yaml
+	go run cmd/main.go
+# go run cmd/main.go & envoy -c gateway/envoy.yaml
 
 # Migrate database in postgresql
 DB_NAME = shop

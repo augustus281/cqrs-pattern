@@ -11,12 +11,14 @@ import (
 
 	"github.com/augustus281/cqrs-pattern/internal/metrics"
 	"github.com/augustus281/cqrs-pattern/internal/order/service"
+	"github.com/augustus281/cqrs-pattern/pkg/interceptors"
 )
 
 type server struct {
 	probeServer   *http.Server
 	mongoClient   *mongo.Client
 	elasticClient *elastic.Client
+	interceptor   interceptors.InterceptorManager
 	pgxConn       *pgxpool.Pool
 	metrics       *metrics.ESMicroserviceMetrics
 	validate      *validator.Validate
@@ -31,3 +33,4 @@ func NewServer() *server {
 		doneCh:   make(chan struct{}),
 	}
 }
+

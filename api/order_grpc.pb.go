@@ -25,9 +25,9 @@ const _ = grpc.SupportPackageIsVersion7
 type OrderServiceClient interface {
 	CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error)
 	PayOrder(ctx context.Context, in *PayOrderRequest, opts ...grpc.CallOption) (*PayOrderResponse, error)
-	SumbitOrder(ctx context.Context, in *SubmitOrderRequest, opts ...grpc.CallOption) (*SubmitOrderResponse, error)
+	SubmitOrder(ctx context.Context, in *SubmitOrderRequest, opts ...grpc.CallOption) (*SubmitOrderResponse, error)
 	UpdateShoppingCart(ctx context.Context, in *UpdateShoppingCartRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	CancelOrder(ctx context.Context, in *CancelOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error)
+	CancelOrder(ctx context.Context, in *CancelOrderRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CompleteOrder(ctx context.Context, in *CompleteOrderRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ChangeDeliveryAddress(ctx context.Context, in *ChangeDeliveryAddressRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetOrderByID(ctx context.Context, in *GetOrderByIDRequest, opts ...grpc.CallOption) (*GetOrderByIDResponse, error)
@@ -60,9 +60,9 @@ func (c *orderServiceClient) PayOrder(ctx context.Context, in *PayOrderRequest, 
 	return out, nil
 }
 
-func (c *orderServiceClient) SumbitOrder(ctx context.Context, in *SubmitOrderRequest, opts ...grpc.CallOption) (*SubmitOrderResponse, error) {
+func (c *orderServiceClient) SubmitOrder(ctx context.Context, in *SubmitOrderRequest, opts ...grpc.CallOption) (*SubmitOrderResponse, error) {
 	out := new(SubmitOrderResponse)
-	err := c.cc.Invoke(ctx, "/orderservice.OrderService/SumbitOrder", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/orderservice.OrderService/SubmitOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,8 +78,8 @@ func (c *orderServiceClient) UpdateShoppingCart(ctx context.Context, in *UpdateS
 	return out, nil
 }
 
-func (c *orderServiceClient) CancelOrder(ctx context.Context, in *CancelOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error) {
-	out := new(CreateOrderResponse)
+func (c *orderServiceClient) CancelOrder(ctx context.Context, in *CancelOrderRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/orderservice.OrderService/CancelOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -129,9 +129,9 @@ func (c *orderServiceClient) Search(ctx context.Context, in *SearchRequest, opts
 type OrderServiceServer interface {
 	CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error)
 	PayOrder(context.Context, *PayOrderRequest) (*PayOrderResponse, error)
-	SumbitOrder(context.Context, *SubmitOrderRequest) (*SubmitOrderResponse, error)
+	SubmitOrder(context.Context, *SubmitOrderRequest) (*SubmitOrderResponse, error)
 	UpdateShoppingCart(context.Context, *UpdateShoppingCartRequest) (*emptypb.Empty, error)
-	CancelOrder(context.Context, *CancelOrderRequest) (*CreateOrderResponse, error)
+	CancelOrder(context.Context, *CancelOrderRequest) (*emptypb.Empty, error)
 	CompleteOrder(context.Context, *CompleteOrderRequest) (*emptypb.Empty, error)
 	ChangeDeliveryAddress(context.Context, *ChangeDeliveryAddressRequest) (*emptypb.Empty, error)
 	GetOrderByID(context.Context, *GetOrderByIDRequest) (*GetOrderByIDResponse, error)
@@ -148,13 +148,13 @@ func (UnimplementedOrderServiceServer) CreateOrder(context.Context, *CreateOrder
 func (UnimplementedOrderServiceServer) PayOrder(context.Context, *PayOrderRequest) (*PayOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PayOrder not implemented")
 }
-func (UnimplementedOrderServiceServer) SumbitOrder(context.Context, *SubmitOrderRequest) (*SubmitOrderResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SumbitOrder not implemented")
+func (UnimplementedOrderServiceServer) SubmitOrder(context.Context, *SubmitOrderRequest) (*SubmitOrderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitOrder not implemented")
 }
 func (UnimplementedOrderServiceServer) UpdateShoppingCart(context.Context, *UpdateShoppingCartRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateShoppingCart not implemented")
 }
-func (UnimplementedOrderServiceServer) CancelOrder(context.Context, *CancelOrderRequest) (*CreateOrderResponse, error) {
+func (UnimplementedOrderServiceServer) CancelOrder(context.Context, *CancelOrderRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelOrder not implemented")
 }
 func (UnimplementedOrderServiceServer) CompleteOrder(context.Context, *CompleteOrderRequest) (*emptypb.Empty, error) {
@@ -217,20 +217,20 @@ func _OrderService_PayOrder_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _OrderService_SumbitOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _OrderService_SubmitOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SubmitOrderRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(OrderServiceServer).SumbitOrder(ctx, in)
+		return srv.(OrderServiceServer).SubmitOrder(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/orderservice.OrderService/SumbitOrder",
+		FullMethod: "/orderservice.OrderService/SubmitOrder",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(OrderServiceServer).SumbitOrder(ctx, req.(*SubmitOrderRequest))
+		return srv.(OrderServiceServer).SubmitOrder(ctx, req.(*SubmitOrderRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -359,8 +359,8 @@ var OrderService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _OrderService_PayOrder_Handler,
 		},
 		{
-			MethodName: "SumbitOrder",
-			Handler:    _OrderService_SumbitOrder_Handler,
+			MethodName: "SubmitOrder",
+			Handler:    _OrderService_SubmitOrder_Handler,
 		},
 		{
 			MethodName: "UpdateShoppingCart",

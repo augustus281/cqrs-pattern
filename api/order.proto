@@ -10,9 +10,9 @@ import "google/protobuf/empty.proto";
 service OrderService {
     rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
     rpc PayOrder(PayOrderRequest) returns (PayOrderResponse);
-    rpc SumbitOrder(SubmitOrderRequest) returns (SubmitOrderResponse);
+    rpc SubmitOrder(SubmitOrderRequest) returns (SubmitOrderResponse);
     rpc UpdateShoppingCart(UpdateShoppingCartRequest) returns (google.protobuf.Empty);
-    rpc CancelOrder(CancelOrderRequest) returns (CreateOrderResponse);
+    rpc CancelOrder(CancelOrderRequest) returns (google.protobuf.Empty);
     rpc CompleteOrder(CompleteOrderRequest) returns (google.protobuf.Empty);
     rpc ChangeDeliveryAddress(ChangeDeliveryAddressRequest) returns (google.protobuf.Empty);
     rpc GetOrderByID(GetOrderByIDRequest) returns (GetOrderByIDResponse);
