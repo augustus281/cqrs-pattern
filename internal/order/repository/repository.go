@@ -10,8 +10,8 @@ import (
 )
 
 type MongoOrderRepository interface {
-	Insert(ctx context.Context, order *mongomodels.OrderProjection) (string, error)
-	GetByID(ctx context.Context, orderID string) (*mongomodels.OrderProjection, error)
+	Insert(ctx context.Context, order *models.OrderProjection) (string, error)
+	GetByID(ctx context.Context, orderID string) (*models.OrderProjection, error)
 	UpdateOrder(ctx context.Context, order *mongomodels.OrderProjection) error
 
 	UpdateCancel(ctx context.Context, order *mongomodels.OrderProjection)
