@@ -16,7 +16,7 @@ type ShopItem struct {
 
 func ShopItemToProto(shopItem *ShopItem) *orderService.ShopItem {
 	return &orderService.ShopItem{
-		ID:          shopItem.ID,
+		Id:          shopItem.ID,
 		Title:       shopItem.Title,
 		Description: shopItem.Description,
 		Quantity:    shopItem.Quantity,
@@ -26,7 +26,7 @@ func ShopItemToProto(shopItem *ShopItem) *orderService.ShopItem {
 
 func ShopItemFromProto(shopItem *orderService.ShopItem) *ShopItem {
 	return &ShopItem{
-		ID:          shopItem.ID,
+		ID:          shopItem.Id,
 		Title:       shopItem.Title,
 		Description: shopItem.Description,
 		Quantity:    shopItem.Quantity,
