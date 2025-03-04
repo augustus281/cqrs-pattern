@@ -1,8 +1,12 @@
 package tracing
 
 import (
+	"context"
+
 	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/ext"
 	"github.com/segmentio/kafka-go"
+	"google.golang.org/grpc/metadata"
 )
 
 func TraceErr(span opentracing.Span, err error) {
@@ -66,4 +70,30 @@ func TextMapCarrierFromKafkaMessageHeaders(headers []kafka.Header) opentracing.T
 		textMap[header.Key] = string(header.Value)
 	}
 	return opentracing.TextMapCarrier(textMap)
+}
+
+func GetTextMapCarrierFromMetaData(ctx context.Context) opentracing.TextMapCarrier {
+	metadataMap := make(opentracing.TextMapCarrier)
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		for key := range md.Copy() {
+			metadataMap.Set(key, md.Get(key)[0])
+		}
+	}
+	return metadataMap
+}
+
+func StartGrpcServerTracerSpan(ctx context.Context, operationName string) (context.Context, opentracing.Span) {
+	textMapCarrierFromMetaData := GetTextMapCarrierFromMetaData(ctx)
+
+	span, err := opentracing.GlobalTracer().Extract(opentracing.TextMap, textMapCarrierFromMetaData)
+	if err != nil {
+		serverSpan := opentracing.GlobalTracer().StartSpan(operationName)
+		ctx = opentracing.ContextWithSpan(ctx, serverSpan)
+		return ctx, serverSpan
+	}
+
+	serverSpan := opentracing.GlobalTracer().StartSpan(operationName, ext.RPCServerOption(span))
+	ctx = opentracing.ContextWithSpan(ctx, serverSpan)
+
+	return ctx, serverSpan
 }
